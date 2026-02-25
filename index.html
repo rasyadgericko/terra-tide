@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra & Tide — Engineered for Longevity</title>
+    <meta name="description"
+        content="High-performance homewares crafted from traceable, organic materials. Utility meets nature.">
+    <!-- Favicon & Web Clip -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <meta name="theme-color" content="#0A0A0A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Terra & Tide">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="bg-[#E5E5E5] text-[#0A0A0A] selection:bg-[#0A0A0A] selection:text-[#F2F2F2]">
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav
+        class="fixed top-0 w-full z-40 bg-[#F2F2F2] border-b border-[#D4D4D4] h-16 flex items-center justify-between px-6">
+        <div class="flex-1 flex gap-8 items-center hidden md:flex">
+            <button onclick="scrollToSection('products-section')"
+                class="text-[11px] font-bold tracking-[0.15em] uppercase hover:text-gray-500 transition-colors">Shop</button>
+            <button onclick="scrollToSection('cta-section')"
+                class="text-[11px] font-bold tracking-[0.15em] uppercase hover:text-gray-500 transition-colors">Manifesto</button>
+        </div>
+
+        <div class="flex-1 flex justify-start md:justify-center">
+            <h1 class="text-xl font-extrabold tracking-tighter uppercase">Terra & Tide</h1>
+        </div>
+
+        <div class="flex-1 flex justify-end gap-6 items-center">
+            <button id="account-nav-btn" onclick="handleAccountClick()"
+                class="text-[11px] font-bold tracking-[0.15em] uppercase hidden md:block hover:text-gray-500 transition-colors">Account</button>
+            <button onclick="openCart()"
+                class="text-[11px] font-bold tracking-[0.15em] uppercase flex items-center gap-2 bg-[#0A0A0A] text-[#F2F2F2] px-4 py-2 hover:bg-gray-800 transition-colors">
+                Cart <span id="cart-count-badge"
+                    class="font-mono text-[10px] bg-[#F2F2F2] text-[#0A0A0A] px-1.5 py-0.5 ml-1">0</span>
+            </button>
+            <button class="md:hidden" onclick="toggleMobileMenu()"><i data-lucide="menu" width="20"
+                    height="20"></i></button>
+        </div>
+    </nav>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="pt-16 pb-24 max-w-[2000px] mx-auto p-4 md:p-6">
+        <!-- Hero -->
+        <div class="bg-[#D4D4D4] gap-[1px] grid grid-cols-1 lg:grid-cols-2 border border-[#D4D4D4]">
+            <div class="bg-[#F2F2F2] flex flex-col justify-between p-8 md:p-16 min-h-[60vh] lg:min-h-[80vh]">
+                <div>
+                    <div
+                        class="inline-block bg-[#0A0A0A] text-[#F2F2F2] text-[10px] font-mono px-2 py-1 uppercase tracking-widest mb-8">
+                        FW // 2024 Collection
+                    </div>
+                    <h2 class="text-6xl md:text-[5.5rem] font-extrabold leading-[0.85] tracking-tighter uppercase mb-8">
+                        Utility <br /> Meets <br /> Nature.
+                    </h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-8 justify-between items-start md:items-end w-full">
+                    <p class="text-sm font-medium leading-relaxed max-w-xs uppercase tracking-wide text-gray-600">
+                        Engineered for longevity. High-performance homewares crafted from traceable, organic materials.
+                    </p>
+                    <button onclick="scrollToSection('products-section')"
+                        class="flex items-center gap-4 text-[13px] font-bold uppercase tracking-[0.2em] border-b-2 border-[#0A0A0A] pb-1 hover:pr-4 transition-all">
+                        View Catalog <i data-lucide="arrow-right" width="16" height="16" stroke-width="2.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-[#F2F2F2] relative overflow-hidden group min-h-[50vh] lg:min-h-[80vh]">
+                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=2000"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    alt="Hero Architectural" />
+            </div>
+        </div>
+
+        <!-- Marquee -->
+        <div class="bg-[#0A0A0A] text-[#F2F2F2] py-4 border-x border-b border-[#0A0A0A] marquee-container border-t-0">
+            <div class="marquee-content text-[11px] font-mono tracking-[0.2em] uppercase flex" id="marquee-content">
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div id="products-section" class="mt-6 md:mt-12 mb-6">
+            <div class="flex justify-between items-end mb-6 px-2">
+                <h3 class="text-2xl md:text-4xl font-extrabold tracking-tighter uppercase">Equipment</h3>
+                <span id="products-count"
+                    class="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500">[04 / 12
+                    ITEMS]</span>
+            </div>
+
+            <div id="products-grid"
+                class="bg-[#D4D4D4] gap-[1px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border border-[#D4D4D4]">
+            </div>
+
+            <!-- Load More Button -->
+            <div class="flex justify-center mt-8">
+                <button id="load-more-btn" onclick="loadMoreProducts()"
+                    class="flex items-center gap-4 bg-[#0A0A0A] text-[#F2F2F2] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-all group">
+                    Load More — <span class="load-more-count font-mono">8 more</span>
+                    <i data-lucide="chevron-down" width="16" height="16"
+                        class="transition-transform duration-300 group-hover:translate-y-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Impact Metrics -->
+        <div class="mt-6 md:mt-12 bg-[#D4D4D4] gap-[1px] grid grid-cols-1 lg:grid-cols-3 border border-[#D4D4D4]">
+            <div
+                class="bg-[#0A0A0A] text-[#F2F2F2] p-8 md:p-12 lg:col-span-1 flex flex-col justify-between min-h-[400px]">
+                <i data-lucide="globe" width="40" height="40" stroke-width="1" class="mb-8"></i>
+                <div>
+                    <h3 class="text-4xl font-extrabold tracking-tighter uppercase mb-4 leading-none">
+                        Impact<br />Metrics.</h3>
+                    <p class="text-sm font-medium text-gray-400 uppercase tracking-wide leading-relaxed">
+                        We measure everything. You see everything. Our supply chain is an open book.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-[#F2F2F2] p-8 md:p-12 flex flex-col justify-between min-h-[300px]">
+                <i data-lucide="activity" width="24" height="24" class="mb-4 text-gray-400"></i>
+                <div>
+                    <span class="block text-5xl font-mono font-bold tracking-tighter mb-2">-84%</span>
+                    <h4 class="text-sm font-bold uppercase tracking-widest mb-2">Carbon Reduction</h4>
+                    <p class="text-[11px] uppercase text-gray-500 font-medium">Compared to industry standard
+                        manufacturing.</p>
+                </div>
+            </div>
+
+            <div class="bg-[#F2F2F2] p-8 md:p-12 flex flex-col justify-between min-h-[300px]">
+                <i data-lucide="box" width="24" height="24" class="mb-4 text-gray-400"></i>
+                <div>
+                    <span class="block text-5xl font-mono font-bold tracking-tighter mb-2">100%</span>
+                    <h4 class="text-sm font-bold uppercase tracking-widest mb-2">Circular Packaging</h4>
+                    <p class="text-[11px] uppercase text-gray-500 font-medium">Fully biodegradable or infinitely
+                        recyclable.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========== CTA SECTION ========== -->
+    <section class="cta-section" id="cta-section">
+        <div class="max-w-[2000px] mx-auto px-6 md:px-12 py-24 md:py-36">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                <div>
+                    <div class="reveal">
+                        <span
+                            class="inline-block text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500 mb-6 border border-gray-700 px-3 py-1">SYS
+                            // JOIN.NOW</span>
+                    </div>
+                    <h2 class="cta-headline reveal reveal-delay-1">
+                        Start<br>Living<br>Better.
+                    </h2>
+                    <p
+                        class="text-sm md:text-base font-medium text-gray-400 uppercase tracking-wide leading-relaxed mt-8 mb-10 max-w-md reveal reveal-delay-2">
+                        Join 12,000+ conscious homeowners who choose products that perform without compromise. Free
+                        shipping on your first order.
+                    </p>
+                    <div class="reveal reveal-delay-3">
+                        <button class="cta-btn" onclick="scrollToSection('products-section')">
+                            Shop the Collection <i data-lucide="arrow-right" width="18" height="18"
+                                stroke-width="2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 reveal reveal-delay-3">
+                    <div class="cta-feature-box">
+                        <i data-lucide="truck" width="20" height="20" class="mb-4 text-gray-500"></i>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest mb-2">Free Shipping</h4>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-wide">On all orders over $50.
+                            Worldwide delivery.</p>
+                    </div>
+                    <div class="cta-feature-box">
+                        <i data-lucide="refresh-cw" width="20" height="20" class="mb-4 text-gray-500"></i>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest mb-2">30-Day Returns</h4>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-wide">No questions asked.
+                            Hassle-free process.</p>
+                    </div>
+                    <div class="cta-feature-box">
+                        <i data-lucide="shield" width="20" height="20" class="mb-4 text-gray-500"></i>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest mb-2">5-Year Warranty</h4>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-wide">Built to last.
+                            Guaranteed craftsmanship.</p>
+                    </div>
+                    <div class="cta-feature-box">
+                        <i data-lucide="leaf" width="20" height="20" class="mb-4 text-gray-500"></i>
+                        <h4 class="text-[11px] font-bold uppercase tracking-widest mb-2">Carbon Neutral</h4>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-wide">Every order offset.
+                            Net-zero commitment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PRODUCT COMPARISON SECTION ========== -->
+    <section class="comparison-section" id="comparison-section">
+        <div class="max-w-[2000px] mx-auto px-4 md:px-6 py-20 md:py-28">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 px-2 gap-4">
+                <div class="reveal">
+                    <span
+                        class="inline-block text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500 mb-3">[ANALYSIS]</span>
+                    <h3 class="text-3xl md:text-5xl font-extrabold tracking-tighter uppercase leading-none">
+                        Why We're<br>Different.
+                    </h3>
+                </div>
+                <p
+                    class="text-[11px] uppercase tracking-widest text-gray-500 font-medium max-w-xs reveal reveal-delay-1">
+                    A side-by-side breakdown of how Terra & Tide compares to traditional homeware brands.
+                </p>
+            </div>
+
+            <div class="comparison-table reveal reveal-delay-2">
+                <!-- Terra & Tide Column -->
+                <div class="comparison-col ours">
+                    <div class="comparison-col-header">
+                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-400">Our
+                            Standard</span>
+                        <h4 class="text-xl font-extrabold tracking-tighter uppercase">Terra & Tide</h4>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check positive"><i data-lucide="check" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide">Organic & Traceable</span>
+                            <p class="text-[10px] text-gray-500 uppercase mt-1">100% certified organic
+                                materials</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check positive"><i data-lucide="check" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide">Carbon Negative</span>
+                            <p class="text-[10px] text-gray-500 uppercase mt-1">84% below industry benchmark</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check positive"><i data-lucide="check" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide">Circular Packaging</span>
+                            <p class="text-[10px] text-gray-500 uppercase mt-1">Fully biodegradable or recyclable</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check positive"><i data-lucide="check" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide">Full Supply Chain
+                                Transparency</span>
+                            <p class="text-[10px] text-gray-500 uppercase mt-1">Open-source impact reports</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check positive"><i data-lucide="check" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide">5+ Year Lifespan</span>
+                            <p class="text-[10px] text-gray-500 uppercase mt-1">Engineered for longevity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor Column -->
+                <div class="comparison-col theirs">
+                    <div class="comparison-col-header">
+                        <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500">Industry
+                            Average</span>
+                        <h4 class="text-xl font-extrabold tracking-tighter uppercase text-gray-400">Traditional
+                            Brands</h4>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check negative"><i data-lucide="x" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide text-gray-400">Synthetic &
+                                Mixed</span>
+                            <p class="text-[10px] text-gray-400 uppercase mt-1">Unknown material origins</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check negative"><i data-lucide="x" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide text-gray-400">High Carbon
+                                Output</span>
+                            <p class="text-[10px] text-gray-400 uppercase mt-1">No reduction commitments</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check negative"><i data-lucide="x" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide text-gray-400">Plastic &
+                                Non-Recyclable</span>
+                            <p class="text-[10px] text-gray-400 uppercase mt-1">Single-use packaging standard</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check negative"><i data-lucide="x" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide text-gray-400">Opaque Supply
+                                Chain</span>
+                            <p class="text-[10px] text-gray-400 uppercase mt-1">No public reporting</p>
+                        </div>
+                    </div>
+                    <div class="comparison-row">
+                        <span class="comparison-check negative"><i data-lucide="x" width="14" height="14"
+                                stroke-width="3"></i></span>
+                        <div>
+                            <span class="text-sm font-bold uppercase tracking-wide text-gray-400">1-2 Year
+                                Lifespan</span>
+                            <p class="text-[10px] text-gray-400 uppercase mt-1">Designed for replacement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIAL SECTION ========== -->
+    <section class="testimonial-section" id="testimonial-section">
+        <div class="max-w-[2000px] mx-auto px-4 md:px-6 py-20 md:py-28">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 px-2 gap-4">
+                <div class="reveal">
+                    <span
+                        class="inline-block text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500 mb-3">[VOICES]</span>
+                    <h3 class="text-3xl md:text-5xl font-extrabold tracking-tighter uppercase leading-none">
+                        What People<br>Are Saying.
+                    </h3>
+                </div>
+                <span
+                    class="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 reveal reveal-delay-1">4.9
+                    / 5.0 — 2,400+ Reviews</span>
+            </div>
+
+            <div class="testimonial-track-wrapper reveal reveal-delay-2">
+                <div class="testimonial-track" id="testimonial-track">
+                    <!-- Card 1 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-inner">
+                            <span class="testimonial-quote-mark">"</span>
+                            <div>
+                                <div class="testimonial-stars">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </div>
+                                <p class="testimonial-text">
+                                    "The Komorebi Linen set transformed our entire bedroom. The quality is unlike
+                                    anything I've experienced — it genuinely gets softer with every wash. Worth every
+                                    cent."
+                                </p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">AK</div>
+                                <div>
+                                    <p class="text-sm font-bold uppercase tracking-wider">Amara K.</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase">Interior Designer,
+                                        Melbourne</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-inner">
+                            <span class="testimonial-quote-mark">"</span>
+                            <div>
+                                <div class="testimonial-stars">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </div>
+                                <p class="testimonial-text">
+                                    "I've furnished two apartments with Terra & Tide pieces. The Nami Oak Stool is
+                                    a centerpiece in my studio — clients always ask about it. Functional art
+                                    at its finest."
+                                </p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">JL</div>
+                                <div>
+                                    <p class="text-sm font-bold uppercase tracking-wider">Jonas L.</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase">Architect, Copenhagen
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-inner">
+                            <span class="testimonial-quote-mark">"</span>
+                            <div>
+                                <div class="testimonial-stars">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </div>
+                                <p class="testimonial-text">
+                                    "Finally, a brand that backs up sustainability claims with real data. The impact
+                                    report alone sold me. The Ceramic Carafe is now a daily essential in our
+                                    kitchen."
+                                </p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">SR</div>
+                                <div>
+                                    <p class="text-sm font-bold uppercase tracking-wider">Sofia R.</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase">Sustainability
+                                        Consultant, Berlin</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-inner">
+                            <span class="testimonial-quote-mark">"</span>
+                            <div>
+                                <div class="testimonial-stars">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </div>
+                                <p class="testimonial-text">
+                                    "The Hinoki Totem candle is absurdly good. 80 hours of burn time and the scent
+                                    fills the entire room without being overwhelming. I'm on my third one already."
+                                </p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">MT</div>
+                                <div>
+                                    <p class="text-sm font-bold uppercase tracking-wider">Marcus T.</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase">Creative Director,
+                                        Tokyo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-card-inner">
+                            <span class="testimonial-quote-mark">"</span>
+                            <div>
+                                <div class="testimonial-stars">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                    </svg>
+                                </div>
+                                <p class="testimonial-text">
+                                    "Gifted the full linen collection to my sister and she hasn't stopped talking
+                                    about it. The unboxing experience alone felt like opening something from a
+                                    luxury maison."
+                                </p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-avatar">EW</div>
+                                <div>
+                                    <p class="text-sm font-bold uppercase tracking-wider">Elena W.</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase">Photographer, New
+                                        York</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <div class="flex justify-center items-center gap-6 mt-10">
+                <button class="testimonial-arrow" onclick="prevTestimonial()" aria-label="Previous testimonial">
+                    <i data-lucide="arrow-left" width="16" height="16" stroke-width="2"></i>
+                </button>
+                <div class="flex gap-3 items-center">
+                    <button class="testimonial-dot active" onclick="goToTestimonial(0)"></button>
+                    <button class="testimonial-dot" onclick="goToTestimonial(1)"></button>
+                    <button class="testimonial-dot" onclick="goToTestimonial(2)"></button>
+                </div>
+                <button class="testimonial-arrow" onclick="nextTestimonial()" aria-label="Next testimonial">
+                    <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="site-footer" id="site-footer">
+        <div class="max-w-[2000px] mx-auto">
+            <!-- Brand + Newsletter -->
+            <div class="px-6 md:px-12 pt-24 md:pt-32 pb-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
+                    <div class="reveal">
+                        <div class="footer-brand" aria-hidden="true">Terra<br>& Tide</div>
+                    </div>
+                    <div class="reveal reveal-delay-2">
+                        <span
+                            class="inline-block text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500 mb-4">Newsletter</span>
+                        <p class="text-sm font-medium text-gray-400 uppercase tracking-wide leading-relaxed mb-8">
+                            Get early access to new collections, impact reports, and exclusive offers.
+                        </p>
+                        <div class="flex gap-3 items-end">
+                            <input type="email" placeholder="Your email address" class="footer-newsletter-input"
+                                id="newsletter-email" onkeydown="if(event.key==='Enter') subscribeNewsletter()" />
+                            <button id="newsletter-btn" class="footer-newsletter-btn"
+                                onclick="subscribeNewsletter()">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider mx-6 md:mx-12"></div>
+
+            <!-- Bottom Bar -->
+            <div class="px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-gray-600 uppercase tracking-[0.15em]">
+                    SYSTEM.VERSION 3.0 // © 2024 Terra & Tide. All rights reserved.
+                </p>
+                <div class="flex items-center gap-8">
+                    <a href="#"
+                        class="text-[10px] font-mono text-gray-600 uppercase tracking-[0.15em] hover:text-gray-300 transition-colors">Terms</a>
+                    <a href="#"
+                        class="text-[10px] font-mono text-gray-600 uppercase tracking-[0.15em] hover:text-gray-300 transition-colors">Privacy</a>
+                    <button class="back-to-top" onclick="scrollToTop()">
+                        Back to Top <i data-lucide="arrow-up" width="12" height="12" stroke-width="2.5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== CART DRAWER ========== -->
+    <div id="cart-overlay"
+        class="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none"
+        onclick="closeCart()"></div>
+
+    <aside id="cart-drawer"
+        class="fixed top-0 right-0 h-full w-full max-w-md bg-[#F2F2F2] z-50 border-l border-[#D4D4D4] shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.8,0,0.2,1)] flex flex-col translate-x-full">
+        <div class="p-6 border-b border-[#D4D4D4] flex justify-between items-center bg-[#F2F2F2]">
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl font-extrabold tracking-tighter uppercase">Cart</h2>
+                <span id="cart-drawer-count"
+                    class="font-mono text-[10px] bg-[#0A0A0A] text-[#F2F2F2] px-2 py-1">0</span>
+            </div>
+            <button onclick="closeCart()" class="hover:rotate-90 transition-transform duration-300">
+                <i data-lucide="x" width="24" height="24" stroke-width="2"></i>
+            </button>
+        </div>
+
+        <div id="cart-items-container" class="flex-1 overflow-y-auto bg-[#F2F2F2]">
+        </div>
+
+        <div id="cart-footer" class="hidden bg-[#F2F2F2] border-t border-[#D4D4D4] p-6 flex flex-col gap-4">
+            <div
+                class="flex flex-col gap-2 font-mono text-[11px] text-gray-500 uppercase pb-4 border-b border-[#D4D4D4]">
+                <div class="flex justify-between"><span>Shipping</span><span>Calculated at checkout</span></div>
+                <div class="flex justify-between"><span>Taxes</span><span>Calculated at checkout</span></div>
+            </div>
+
+            <div class="flex justify-between items-end mb-4">
+                <span class="text-[11px] font-bold uppercase tracking-widest">Total Amount</span>
+                <span id="cart-total" class="font-mono text-2xl font-bold">$0</span>
+            </div>
+
+            <button onclick="openCheckout()"
+                class="w-full bg-[#0A0A0A] text-[#F2F2F2] py-4 text-[12px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-all flex items-center justify-center gap-3">
+                Checkout <i data-lucide="arrow-right" width="16" height="16"></i>
+            </button>
+
+            <div class="grid grid-cols-3 gap-2 mt-2">
+                <div
+                    class="border border-[#D4D4D4] bg-white h-10 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest">
+                    Shop Pay</div>
+                <div
+                    class="border border-[#D4D4D4] bg-white h-10 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest">
+                    Apple Pay</div>
+                <div
+                    class="border border-[#D4D4D4] bg-white h-10 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest">
+                    G Pay</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========== AUTH MODAL ========== -->
+    <div id="auth-overlay"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4"
+        onclick="closeAuthModal(event)">
+        <div class="auth-modal" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="p-6 border-b border-[#D4D4D4] flex justify-between items-center">
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500">[ACCOUNT]</span>
+                    <h2 class="text-xl font-extrabold tracking-tighter uppercase leading-none mt-1">Your Account</h2>
+                </div>
+                <button onclick="closeAuthModalDirect()" class="hover:rotate-90 transition-transform duration-300">
+                    <i data-lucide="x" width="20" height="20" stroke-width="2"></i>
+                </button>
+            </div>
+            <!-- Tabs -->
+            <div class="flex border-b border-[#D4D4D4]">
+                <button id="tab-signin" class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
+                <button id="tab-signup" class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+            <!-- Sign In Form -->
+            <div id="auth-signin-form" class="p-6 flex flex-col gap-5">
+                <div id="auth-error-signin" class="auth-error hidden"></div>
+                <div class="auth-field">
+                    <label class="auth-label">Email Address</label>
+                    <input type="email" id="signin-email" class="auth-input" placeholder="your@email.com" />
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label">Password</label>
+                    <input type="password" id="signin-password" class="auth-input" placeholder="••••••••"
+                        onkeydown="if(event.key==='Enter') handleSignIn()" />
+                </div>
+                <button id="signin-btn" onclick="handleSignIn()" class="auth-btn-primary mt-2">
+                    Sign In <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                </button>
+                <p class="text-[10px] font-mono text-gray-500 uppercase text-center">
+                    No account? <button onclick="switchAuthTab('signup')"
+                        class="underline hover:text-[#0A0A0A] transition-colors">Create one</button>
+                </p>
+            </div>
+            <!-- Sign Up Form -->
+            <div id="auth-signup-form" class="p-6 flex flex-col gap-5 hidden">
+                <div id="auth-error-signup" class="auth-error hidden"></div>
+                <div class="auth-field">
+                    <label class="auth-label">Full Name</label>
+                    <input type="text" id="signup-name" class="auth-input" placeholder="Your full name" />
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label">Email Address</label>
+                    <input type="email" id="signup-email" class="auth-input" placeholder="your@email.com" />
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label">Password</label>
+                    <input type="password" id="signup-password" class="auth-input" placeholder="Min. 6 characters"
+                        onkeydown="if(event.key==='Enter') handleSignUp()" />
+                </div>
+                <button id="signup-btn" onclick="handleSignUp()" class="auth-btn-primary mt-2">
+                    Create Account <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                </button>
+                <p class="text-[10px] font-mono text-gray-500 uppercase text-center">
+                    Have an account? <button onclick="switchAuthTab('signin')"
+                        class="underline hover:text-[#0A0A0A] transition-colors">Sign in</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== CHECKOUT OVERLAY ========== -->
+    <div id="checkout-overlay"
+        class="fixed inset-0 bg-[#F2F2F2] z-[60] opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col overflow-y-auto">
+        <!-- Sticky Header -->
+        <div
+            class="sticky top-0 bg-[#F2F2F2] border-b border-[#D4D4D4] px-6 py-4 flex items-center justify-between z-10">
+            <h2 class="text-lg font-extrabold tracking-tighter uppercase">Checkout</h2>
+            <div class="hidden md:flex items-center gap-3" id="checkout-step-indicators">
+                <span class="checkout-step-indicator active" data-step="1">01 Contact</span>
+                <span class="text-[#D4D4D4] font-mono text-xs">—</span>
+                <span class="checkout-step-indicator" data-step="2">02 Shipping</span>
+                <span class="text-[#D4D4D4] font-mono text-xs">—</span>
+                <span class="checkout-step-indicator" data-step="3">03 Review</span>
+            </div>
+            <button onclick="closeCheckout()" class="hover:rotate-90 transition-transform duration-300">
+                <i data-lucide="x" width="20" height="20" stroke-width="2"></i>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 w-full max-w-2xl mx-auto px-6 py-12">
+
+            <!-- Step 1: Contact -->
+            <div id="checkout-step-1" class="checkout-panel">
+                <h3 class="checkout-panel-title">Contact Information</h3>
+                <div id="co-error-1" class="auth-error hidden mb-6"></div>
+                <div class="flex flex-col gap-6">
+                    <div class="checkout-field">
+                        <label class="checkout-label">Email Address *</label>
+                        <input type="email" id="co-email" class="checkout-input" placeholder="your@email.com" />
+                    </div>
+                    <div class="checkout-field">
+                        <label class="checkout-label">Phone Number *</label>
+                        <input type="tel" id="co-phone" class="checkout-input" placeholder="+1 (555) 000-0000" />
+                    </div>
+                </div>
+                <div class="checkout-actions">
+                    <span></span>
+                    <button onclick="goToStep(2)" class="checkout-btn-primary">
+                        Continue to Shipping <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Shipping -->
+            <div id="checkout-step-2" class="checkout-panel hidden">
+                <h3 class="checkout-panel-title">Shipping Address</h3>
+                <div id="co-error-2" class="auth-error hidden mb-6"></div>
+                <div class="flex flex-col gap-6">
+                    <div class="checkout-field">
+                        <label class="checkout-label">Full Name *</label>
+                        <input type="text" id="co-name" class="checkout-input" placeholder="Your full name" />
+                    </div>
+                    <div class="checkout-field">
+                        <label class="checkout-label">Address Line 1 *</label>
+                        <input type="text" id="co-address1" class="checkout-input" placeholder="Street address" />
+                    </div>
+                    <div class="checkout-field">
+                        <label class="checkout-label">Address Line 2</label>
+                        <input type="text" id="co-address2" class="checkout-input"
+                            placeholder="Apt, suite, unit (optional)" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="checkout-field">
+                            <label class="checkout-label">City *</label>
+                            <input type="text" id="co-city" class="checkout-input" placeholder="City" />
+                        </div>
+                        <div class="checkout-field">
+                            <label class="checkout-label">State / Province *</label>
+                            <input type="text" id="co-state" class="checkout-input" placeholder="State" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="checkout-field">
+                            <label class="checkout-label">ZIP / Postal Code *</label>
+                            <input type="text" id="co-zip" class="checkout-input" placeholder="00000" />
+                        </div>
+                        <div class="checkout-field">
+                            <label class="checkout-label">Country *</label>
+                            <input type="text" id="co-country" class="checkout-input" placeholder="Country" />
+                        </div>
+                    </div>
+
+                    <!-- Shipping Method -->
+                    <div class="mt-4">
+                        <label class="checkout-label mb-4 block">Shipping Method *</label>
+                        <div class="flex flex-col gap-3">
+                            <button class="checkout-shipping-option selected" data-method="standard"
+                                onclick="selectShipping('standard')">
+                                <div class="text-left">
+                                    <p class="text-sm font-bold uppercase tracking-wide">Standard Shipping</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase mt-1">5–7 Business Days</p>
+                                </div>
+                                <span class="font-mono font-bold text-sm">Free</span>
+                            </button>
+                            <button class="checkout-shipping-option" data-method="express"
+                                onclick="selectShipping('express')">
+                                <div class="text-left">
+                                    <p class="text-sm font-bold uppercase tracking-wide">Express Shipping</p>
+                                    <p class="text-[10px] font-mono text-gray-500 uppercase mt-1">1–2 Business Days</p>
+                                </div>
+                                <span class="font-mono font-bold text-sm">$15</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkout-actions">
+                    <button onclick="goToStep(1)" class="checkout-btn-ghost">
+                        <i data-lucide="arrow-left" width="14" height="14" stroke-width="2"></i> Back
+                    </button>
+                    <button onclick="goToStep(3)" class="checkout-btn-primary">
+                        Review Order <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Review -->
+            <div id="checkout-step-3" class="checkout-panel hidden">
+                <h3 class="checkout-panel-title">Review & Place Order</h3>
+                <div id="checkout-order-summary"></div>
+                <div class="checkout-actions">
+                    <button onclick="goToStep(2)" class="checkout-btn-ghost">
+                        <i data-lucide="arrow-left" width="14" height="14" stroke-width="2"></i> Back
+                    </button>
+                    <button id="place-order-btn" onclick="submitOrder()" class="checkout-btn-primary">
+                        Place Order <i data-lucide="check" width="16" height="16" stroke-width="2.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Confirmation -->
+            <div id="checkout-confirmation" class="checkout-panel hidden">
+                <div class="flex flex-col items-center text-center gap-8 py-8">
+                    <div class="checkout-confirmation-check">✓</div>
+                    <div>
+                        <h3 class="text-4xl font-extrabold tracking-tighter uppercase leading-none mb-3">
+                            Order<br>Confirmed.</h3>
+                        <p id="co-order-number" class="text-[11px] font-mono uppercase tracking-widest text-gray-500">
+                            ORDER // #000000</p>
+                    </div>
+                    <div class="w-full max-w-sm border border-[#D4D4D4] p-6 flex flex-col gap-3 text-center">
+                        <p id="co-delivery-date" class="text-[11px] font-mono uppercase tracking-widest text-gray-500">
+                        </p>
+                        <p class="text-2xl font-mono font-bold" id="co-confirm-total"></p>
+                        <p class="text-[10px] font-mono text-gray-400 uppercase tracking-wide">A confirmation will be
+                            sent to your email.</p>
+                    </div>
+                    <button onclick="closeCheckout()" class="checkout-btn-primary">
+                        Continue Shopping <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========== ACCOUNT DASHBOARD ========== -->
+    <div id="account-overlay"
+        class="fixed inset-0 bg-[#F2F2F2] z-[60] opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto">
+        <div class="max-w-2xl mx-auto px-6 py-12">
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-12">
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500">[ACCOUNT]</span>
+                    <h2 id="account-welcome"
+                        class="text-3xl md:text-5xl font-extrabold tracking-tighter uppercase leading-none mt-2">Welcome
+                        Back.</h2>
+                </div>
+                <button onclick="closeAccountDashboard()"
+                    class="hover:rotate-90 transition-transform duration-300 mt-1">
+                    <i data-lucide="x" width="24" height="24" stroke-width="2"></i>
+                </button>
+            </div>
+
+            <!-- Account Details -->
+            <div class="account-section-card">
+                <span class="text-[10px] font-mono text-gray-500 uppercase tracking-widest block mb-4">Account
+                    Details</span>
+                <p class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Email</p>
+                <p id="account-email-display" class="text-sm font-bold uppercase tracking-wide mt-1"></p>
+            </div>
+
+            <!-- Orders -->
+            <div id="account-orders-section"></div>
+
+            <!-- Sign Out -->
+            <button onclick="handleSignOut()"
+                class="mt-8 flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-[#0A0A0A] transition-colors">
+                <i data-lucide="log-out" width="14" height="14" stroke-width="2"></i> Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== MOBILE MENU ========== -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-[#0A0A0A] z-[70] flex flex-col opacity-0 pointer-events-none transition-opacity duration-300 md:hidden">
+        <div class="flex justify-between items-center px-6 h-16 border-b border-white/10">
+            <h1 class="text-xl font-extrabold tracking-tighter uppercase text-[#F2F2F2]">Terra & Tide</h1>
+            <button onclick="closeMobileMenu()"
+                class="text-[#F2F2F2] hover:rotate-90 transition-transform duration-300">
+                <i data-lucide="x" width="24" height="24" stroke-width="2"></i>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-2 p-8 mt-6">
+            <button onclick="scrollToSection('products-section'); closeMobileMenu()"
+                class="text-left text-4xl font-extrabold uppercase tracking-tighter text-[#F2F2F2] hover:text-gray-500 transition-colors py-3 border-b border-white/10">Shop</button>
+            <button onclick="scrollToSection('cta-section'); closeMobileMenu()"
+                class="text-left text-4xl font-extrabold uppercase tracking-tighter text-[#F2F2F2] hover:text-gray-500 transition-colors py-3 border-b border-white/10">Manifesto</button>
+            <button onclick="handleAccountClick(); closeMobileMenu()"
+                class="text-left text-4xl font-extrabold uppercase tracking-tighter text-[#F2F2F2] hover:text-gray-500 transition-colors py-3">Account</button>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
