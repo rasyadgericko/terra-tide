@@ -8,6 +8,40 @@ body {
     background-color: #E5E5E5;
 }
 
+/* --- Skip Link --- */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 1rem;
+    z-index: 9999;
+    background: #0A0A0A;
+    color: #F2F2F2;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: left 0.1s ease;
+}
+
+.skip-link:focus {
+    left: 1rem;
+}
+
+/* Screen-reader-only utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 @keyframes productFadeIn {
     from {
         opacity: 0;
@@ -840,4 +874,45 @@ body {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 4px 10px;
+}
+
+/* ============================================
+   PERFORMANCE: content-visibility
+   Defer rendering of below-fold sections
+   ============================================ */
+.cta-section,
+.comparison-section,
+.testimonial-section,
+.site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 600px;
+}
+
+/* ============================================
+   ACCESSIBILITY: prefers-reduced-motion
+   Disable animations for users who prefer it
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .marquee-content {
+        animation: none;
+    }
+
+    .testimonial-track {
+        transition: none;
+    }
 }

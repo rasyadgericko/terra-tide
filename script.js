@@ -81,15 +81,17 @@ function renderProducts() {
         <img 
           src="${product.image}" 
           class="w-full h-full object-cover filter contrast-[1.1] saturate-[0.85] transition-transform duration-700 group-hover:scale-110" 
-          alt="${product.name}"
+          alt="${product.name} — ${product.specs}"
           loading="lazy"
+          decoding="async"
         />
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
           <button 
             onclick="addToCart(${product.id})"
+            aria-label="Add ${product.name} to cart"
             class="bg-[#F2F2F2] text-[#0A0A0A] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:scale-105 transition-all flex items-center gap-2"
           >
-            <i data-lucide="plus" width="14" height="14"></i> Add to Cart
+            <i data-lucide="plus" width="14" height="14" aria-hidden="true"></i> Add to Cart
           </button>
         </div>
       </div>
@@ -103,9 +105,10 @@ function renderProducts() {
           <span class="font-mono text-lg font-bold">$${product.price}</span>
           <button 
             onclick="addToCart(${product.id})"
+            aria-label="Add ${product.name} to cart"
             class="w-8 h-8 rounded-full border border-[#0A0A0A] flex items-center justify-center hover:bg-[#0A0A0A] hover:text-[#F2F2F2] transition-colors md:hidden"
           >
-            <i data-lucide="plus" width="14" height="14"></i>
+            <i data-lucide="plus" width="14" height="14" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -207,27 +210,27 @@ function renderCart() {
         ${cart.map(item => `
           <div class="flex gap-4 p-4 border-b border-[#D4D4D4]">
             <div class="w-20 h-24 bg-gray-200 shrink-0 border border-[#D4D4D4]">
-              <img src="${item.image}" class="w-full h-full object-cover filter contrast-[1.1]" alt="${item.name}" />
+              <img src="${item.image}" class="w-full h-full object-cover filter contrast-[1.1]" alt="${item.name}" loading="lazy" decoding="async" />
             </div>
             <div class="flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start mb-1">
                   <h4 class="font-bold text-sm tracking-tight uppercase pr-4">${item.name}</h4>
-                  <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 transition-colors shrink-0">
-                    <i data-lucide="x" width="16" height="16"></i>
+                  <button onclick="removeFromCart(${item.id})" aria-label="Remove ${item.name} from cart" class="text-gray-400 hover:text-red-500 transition-colors shrink-0">
+                    <i data-lucide="x" width="16" height="16" aria-hidden="true"></i>
                   </button>
                 </div>
                 <p class="text-[10px] font-mono text-gray-500 uppercase">${item.category}</p>
               </div>
               
               <div class="flex justify-between items-end">
-                <div class="flex items-center border border-[#D4D4D4] bg-white">
-                  <button onclick="updateQty(${item.id}, -1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors">
-                    <i data-lucide="minus" width="12" height="12"></i>
+                <div class="flex items-center border border-[#D4D4D4] bg-white" role="group" aria-label="${item.name} quantity">
+                  <button onclick="updateQty(${item.id}, -1)" aria-label="Decrease quantity" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors">
+                    <i data-lucide="minus" width="12" height="12" aria-hidden="true"></i>
                   </button>
-                  <span class="w-8 text-center font-mono text-[11px] font-bold">${item.quantity}</span>
-                  <button onclick="updateQty(${item.id}, 1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors">
-                    <i data-lucide="plus" width="12" height="12"></i>
+                  <span class="w-8 text-center font-mono text-[11px] font-bold" aria-live="polite">${item.quantity}</span>
+                  <button onclick="updateQty(${item.id}, 1)" aria-label="Increase quantity" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors">
+                    <i data-lucide="plus" width="12" height="12" aria-hidden="true"></i>
                   </button>
                 </div>
                 <span class="font-mono font-bold">$${item.price * item.quantity}</span>
@@ -316,7 +319,9 @@ function updateTestimonialPosition() {
 function updateTestimonialDots() {
   const dots = document.querySelectorAll('.testimonial-dot');
   dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === testimonialIndex);
+    const isActive = i === testimonialIndex;
+    dot.classList.toggle('active', isActive);
+    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
   });
 }
 
@@ -398,20 +403,24 @@ function subscribeNewsletter() {
 // --- Mobile Menu ---
 function toggleMobileMenu() {
   const menu = document.getElementById('mobile-menu');
+  const toggle = document.getElementById('mobile-menu-toggle');
   const isOpen = !menu.classList.contains('opacity-0');
   if (isOpen) {
     closeMobileMenu();
   } else {
     menu.classList.remove('opacity-0', 'pointer-events-none');
     document.body.style.overflow = 'hidden';
+    if (toggle) toggle.setAttribute('aria-expanded', 'true');
     lucide.createIcons();
   }
 }
 
 function closeMobileMenu() {
   const menu = document.getElementById('mobile-menu');
+  const toggle = document.getElementById('mobile-menu-toggle');
   menu.classList.add('opacity-0', 'pointer-events-none');
   document.body.style.overflow = '';
+  if (toggle) toggle.setAttribute('aria-expanded', 'false');
 }
 
 // ══════════════════════════════════════════════════════════════════════════════

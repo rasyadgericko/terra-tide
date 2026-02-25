@@ -4,29 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terra & Tide — Engineered for Longevity</title>
+    <title>Terra &amp; Tide — Engineered for Longevity</title>
     <meta name="description"
         content="High-performance homewares crafted from traceable, organic materials. Utility meets nature.">
-    <!-- Favicon & Web Clip -->
-    <link rel="icon" href="assets/favicon.png" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="assets/favicon.png">
+
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+    <link rel="dns-prefetch" href="https://nymxhmekhiwifkaccafc.supabase.co">
+
+    <!-- Favicon &amp; Web Clip -->
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/webclip.png">
     <meta name="theme-color" content="#0A0A0A">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Terra & Tide">
+    <meta name="apple-mobile-web-app-title" content="Terra &amp; Tide">
+
+    <!-- LCP Hero Image Preload -->
+    <link rel="preload" as="image"
+        href="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&amp;fit=crop&amp;q=80&amp;w=1200"
+        fetchpriority="high">
+
+    <!-- Tailwind CDN (synchronous — runtime JIT cannot be deferred without FOUC) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+
+    <!-- Deferred third-party scripts — execute in document order after DOM parsed -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+
+    <!-- Non-blocking Google Fonts -->
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap"
+            rel="stylesheet">
+    </noscript>
+
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body class="bg-[#E5E5E5] text-[#0A0A0A] selection:bg-[#0A0A0A] selection:text-[#F2F2F2]">
 
+    <!-- Skip to main content -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- ========== NAVIGATION ========== -->
-    <nav
+    <nav aria-label="Main navigation"
         class="fixed top-0 w-full z-40 bg-[#F2F2F2] border-b border-[#D4D4D4] h-16 flex items-center justify-between px-6">
         <div class="flex-1 flex gap-8 items-center hidden md:flex">
             <button onclick="scrollToSection('products-section')"
@@ -36,24 +66,26 @@
         </div>
 
         <div class="flex-1 flex justify-start md:justify-center">
-            <h1 class="text-xl font-extrabold tracking-tighter uppercase">Terra & Tide</h1>
+            <h1 class="text-xl font-extrabold tracking-tighter uppercase">Terra &amp; Tide</h1>
         </div>
 
         <div class="flex-1 flex justify-end gap-6 items-center">
             <button id="account-nav-btn" onclick="handleAccountClick()"
                 class="text-[11px] font-bold tracking-[0.15em] uppercase hidden md:block hover:text-gray-500 transition-colors">Account</button>
-            <button onclick="openCart()"
+            <button onclick="openCart()" aria-label="Open cart" aria-controls="cart-drawer"
                 class="text-[11px] font-bold tracking-[0.15em] uppercase flex items-center gap-2 bg-[#0A0A0A] text-[#F2F2F2] px-4 py-2 hover:bg-gray-800 transition-colors">
-                Cart <span id="cart-count-badge"
+                Cart <span id="cart-count-badge" aria-live="polite" aria-atomic="true"
                     class="font-mono text-[10px] bg-[#F2F2F2] text-[#0A0A0A] px-1.5 py-0.5 ml-1">0</span>
             </button>
-            <button class="md:hidden" onclick="toggleMobileMenu()"><i data-lucide="menu" width="20"
-                    height="20"></i></button>
+            <button class="md:hidden" onclick="toggleMobileMenu()" aria-label="Open navigation menu"
+                aria-expanded="false" aria-controls="mobile-menu" id="mobile-menu-toggle">
+                <i data-lucide="menu" width="20" height="20" aria-hidden="true"></i>
+            </button>
         </div>
     </nav>
 
     <!-- ========== MAIN CONTENT ========== -->
-    <main class="pt-16 pb-24 max-w-[2000px] mx-auto p-4 md:p-6">
+    <main id="main-content" class="pt-16 pb-24 max-w-[2000px] mx-auto p-4 md:p-6">
         <!-- Hero -->
         <div class="bg-[#D4D4D4] gap-[1px] grid grid-cols-1 lg:grid-cols-2 border border-[#D4D4D4]">
             <div class="bg-[#F2F2F2] flex flex-col justify-between p-8 md:p-16 min-h-[60vh] lg:min-h-[80vh]">
@@ -79,9 +111,14 @@
             </div>
 
             <div class="bg-[#F2F2F2] relative overflow-hidden group min-h-[50vh] lg:min-h-[80vh]">
-                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=2000"
+                <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1200"
+                    srcset="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=800 800w,
+                            https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1200 1200w,
+                            https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=2000 2000w"
+                    sizes="(max-width: 1024px) 100vw, 50vw" width="1200" height="800" fetchpriority="high"
+                    decoding="async"
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                    alt="Hero Architectural" />
+                    alt="Architectural interior featuring natural materials and organic textures — Terra &amp; Tide homeware" />
             </div>
         </div>
 
@@ -574,17 +611,20 @@
             </div>
 
             <!-- Carousel Controls -->
-            <div class="flex justify-center items-center gap-6 mt-10">
+            <div class="flex justify-center items-center gap-6 mt-10" role="group" aria-label="Testimonial navigation">
                 <button class="testimonial-arrow" onclick="prevTestimonial()" aria-label="Previous testimonial">
-                    <i data-lucide="arrow-left" width="16" height="16" stroke-width="2"></i>
+                    <i data-lucide="arrow-left" width="16" height="16" stroke-width="2" aria-hidden="true"></i>
                 </button>
                 <div class="flex gap-3 items-center">
-                    <button class="testimonial-dot active" onclick="goToTestimonial(0)"></button>
-                    <button class="testimonial-dot" onclick="goToTestimonial(1)"></button>
-                    <button class="testimonial-dot" onclick="goToTestimonial(2)"></button>
+                    <button class="testimonial-dot active" onclick="goToTestimonial(0)" aria-label="Go to testimonial 1"
+                        aria-current="true"></button>
+                    <button class="testimonial-dot" onclick="goToTestimonial(1)"
+                        aria-label="Go to testimonial 2"></button>
+                    <button class="testimonial-dot" onclick="goToTestimonial(2)"
+                        aria-label="Go to testimonial 3"></button>
                 </div>
                 <button class="testimonial-arrow" onclick="nextTestimonial()" aria-label="Next testimonial">
-                    <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                    <i data-lucide="arrow-right" width="16" height="16" stroke-width="2" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
@@ -606,8 +646,10 @@
                             Get early access to new collections, impact reports, and exclusive offers.
                         </p>
                         <div class="flex gap-3 items-end">
+                            <label for="newsletter-email" class="sr-only">Your email address</label>
                             <input type="email" placeholder="Your email address" class="footer-newsletter-input"
-                                id="newsletter-email" onkeydown="if(event.key==='Enter') subscribeNewsletter()" />
+                                id="newsletter-email" autocomplete="email"
+                                onkeydown="if(event.key==='Enter') subscribeNewsletter()" />
                             <button id="newsletter-btn" class="footer-newsletter-btn"
                                 onclick="subscribeNewsletter()">Subscribe</button>
                         </div>
@@ -638,18 +680,19 @@
     <!-- ========== CART DRAWER ========== -->
     <div id="cart-overlay"
         class="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none"
-        onclick="closeCart()"></div>
+        onclick="closeCart()" aria-hidden="true"></div>
 
-    <aside id="cart-drawer"
+    <aside id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-heading"
         class="fixed top-0 right-0 h-full w-full max-w-md bg-[#F2F2F2] z-50 border-l border-[#D4D4D4] shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.8,0,0.2,1)] flex flex-col translate-x-full">
         <div class="p-6 border-b border-[#D4D4D4] flex justify-between items-center bg-[#F2F2F2]">
             <div class="flex items-center gap-3">
-                <h2 class="text-xl font-extrabold tracking-tighter uppercase">Cart</h2>
-                <span id="cart-drawer-count"
+                <h2 id="cart-heading" class="text-xl font-extrabold tracking-tighter uppercase">Cart</h2>
+                <span id="cart-drawer-count" aria-live="polite" aria-atomic="true"
                     class="font-mono text-[10px] bg-[#0A0A0A] text-[#F2F2F2] px-2 py-1">0</span>
             </div>
-            <button onclick="closeCart()" class="hover:rotate-90 transition-transform duration-300">
-                <i data-lucide="x" width="24" height="24" stroke-width="2"></i>
+            <button onclick="closeCart()" aria-label="Close cart"
+                class="hover:rotate-90 transition-transform duration-300">
+                <i data-lucide="x" width="24" height="24" stroke-width="2" aria-hidden="true"></i>
             </button>
         </div>
 
@@ -690,37 +733,43 @@
     <!-- ========== AUTH MODAL ========== -->
     <div id="auth-overlay"
         class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4"
-        onclick="closeAuthModal(event)">
-        <div class="auth-modal" onclick="event.stopPropagation()">
+        onclick="closeAuthModal(event)" aria-hidden="true">
+        <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-heading"
+            onclick="event.stopPropagation()">
             <!-- Header -->
             <div class="p-6 border-b border-[#D4D4D4] flex justify-between items-center">
                 <div>
                     <span class="text-[10px] font-mono uppercase tracking-[0.3em] text-gray-500">[ACCOUNT]</span>
-                    <h2 class="text-xl font-extrabold tracking-tighter uppercase leading-none mt-1">Your Account</h2>
+                    <h2 id="auth-heading" class="text-xl font-extrabold tracking-tighter uppercase leading-none mt-1">
+                        Your Account</h2>
                 </div>
-                <button onclick="closeAuthModalDirect()" class="hover:rotate-90 transition-transform duration-300">
-                    <i data-lucide="x" width="20" height="20" stroke-width="2"></i>
+                <button onclick="closeAuthModalDirect()" aria-label="Close account modal"
+                    class="hover:rotate-90 transition-transform duration-300">
+                    <i data-lucide="x" width="20" height="20" stroke-width="2" aria-hidden="true"></i>
                 </button>
             </div>
             <!-- Tabs -->
-            <div class="flex border-b border-[#D4D4D4]">
-                <button id="tab-signin" class="auth-tab active" onclick="switchAuthTab('signin')">Sign In</button>
-                <button id="tab-signup" class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+            <div class="flex border-b border-[#D4D4D4]" role="tablist">
+                <button id="tab-signin" class="auth-tab active" role="tab" aria-selected="true"
+                    aria-controls="auth-signin-form" onclick="switchAuthTab('signin')">Sign In</button>
+                <button id="tab-signup" class="auth-tab" role="tab" aria-selected="false"
+                    aria-controls="auth-signup-form" onclick="switchAuthTab('signup')">Sign Up</button>
             </div>
             <!-- Sign In Form -->
-            <div id="auth-signin-form" class="p-6 flex flex-col gap-5">
-                <div id="auth-error-signin" class="auth-error hidden"></div>
+            <div id="auth-signin-form" class="p-6 flex flex-col gap-5" role="tabpanel" aria-labelledby="tab-signin">
+                <div id="auth-error-signin" class="auth-error hidden" role="alert"></div>
                 <div class="auth-field">
-                    <label class="auth-label">Email Address</label>
-                    <input type="email" id="signin-email" class="auth-input" placeholder="your@email.com" />
+                    <label class="auth-label" for="signin-email">Email Address</label>
+                    <input type="email" id="signin-email" class="auth-input" placeholder="your@email.com"
+                        autocomplete="email" />
                 </div>
                 <div class="auth-field">
-                    <label class="auth-label">Password</label>
+                    <label class="auth-label" for="signin-password">Password</label>
                     <input type="password" id="signin-password" class="auth-input" placeholder="••••••••"
-                        onkeydown="if(event.key==='Enter') handleSignIn()" />
+                        autocomplete="current-password" onkeydown="if(event.key==='Enter') handleSignIn()" />
                 </div>
                 <button id="signin-btn" onclick="handleSignIn()" class="auth-btn-primary mt-2">
-                    Sign In <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                    Sign In <i data-lucide="arrow-right" width="16" height="16" stroke-width="2" aria-hidden="true"></i>
                 </button>
                 <p class="text-[10px] font-mono text-gray-500 uppercase text-center">
                     No account? <button onclick="switchAuthTab('signup')"
@@ -728,23 +777,27 @@
                 </p>
             </div>
             <!-- Sign Up Form -->
-            <div id="auth-signup-form" class="p-6 flex flex-col gap-5 hidden">
-                <div id="auth-error-signup" class="auth-error hidden"></div>
+            <div id="auth-signup-form" class="p-6 flex flex-col gap-5 hidden" role="tabpanel"
+                aria-labelledby="tab-signup">
+                <div id="auth-error-signup" class="auth-error hidden" role="alert"></div>
                 <div class="auth-field">
-                    <label class="auth-label">Full Name</label>
-                    <input type="text" id="signup-name" class="auth-input" placeholder="Your full name" />
+                    <label class="auth-label" for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" class="auth-input" placeholder="Your full name"
+                        autocomplete="name" />
                 </div>
                 <div class="auth-field">
-                    <label class="auth-label">Email Address</label>
-                    <input type="email" id="signup-email" class="auth-input" placeholder="your@email.com" />
+                    <label class="auth-label" for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" class="auth-input" placeholder="your@email.com"
+                        autocomplete="email" />
                 </div>
                 <div class="auth-field">
-                    <label class="auth-label">Password</label>
+                    <label class="auth-label" for="signup-password">Password</label>
                     <input type="password" id="signup-password" class="auth-input" placeholder="Min. 6 characters"
-                        onkeydown="if(event.key==='Enter') handleSignUp()" />
+                        autocomplete="new-password" onkeydown="if(event.key==='Enter') handleSignUp()" />
                 </div>
                 <button id="signup-btn" onclick="handleSignUp()" class="auth-btn-primary mt-2">
-                    Create Account <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                    Create Account <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"
+                        aria-hidden="true"></i>
                 </button>
                 <p class="text-[10px] font-mono text-gray-500 uppercase text-center">
                     Have an account? <button onclick="switchAuthTab('signin')"
@@ -755,21 +808,22 @@
     </div>
 
     <!-- ========== CHECKOUT OVERLAY ========== -->
-    <div id="checkout-overlay"
+    <div id="checkout-overlay" role="dialog" aria-modal="true" aria-labelledby="checkout-heading"
         class="fixed inset-0 bg-[#F2F2F2] z-[60] opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col overflow-y-auto">
         <!-- Sticky Header -->
         <div
             class="sticky top-0 bg-[#F2F2F2] border-b border-[#D4D4D4] px-6 py-4 flex items-center justify-between z-10">
-            <h2 class="text-lg font-extrabold tracking-tighter uppercase">Checkout</h2>
-            <div class="hidden md:flex items-center gap-3" id="checkout-step-indicators">
+            <h2 id="checkout-heading" class="text-lg font-extrabold tracking-tighter uppercase">Checkout</h2>
+            <div class="hidden md:flex items-center gap-3" id="checkout-step-indicators" aria-label="Checkout progress">
                 <span class="checkout-step-indicator active" data-step="1">01 Contact</span>
-                <span class="text-[#D4D4D4] font-mono text-xs">—</span>
+                <span class="text-[#D4D4D4] font-mono text-xs" aria-hidden="true">—</span>
                 <span class="checkout-step-indicator" data-step="2">02 Shipping</span>
-                <span class="text-[#D4D4D4] font-mono text-xs">—</span>
+                <span class="text-[#D4D4D4] font-mono text-xs" aria-hidden="true">—</span>
                 <span class="checkout-step-indicator" data-step="3">03 Review</span>
             </div>
-            <button onclick="closeCheckout()" class="hover:rotate-90 transition-transform duration-300">
-                <i data-lucide="x" width="20" height="20" stroke-width="2"></i>
+            <button onclick="closeCheckout()" aria-label="Close checkout"
+                class="hover:rotate-90 transition-transform duration-300">
+                <i data-lucide="x" width="20" height="20" stroke-width="2" aria-hidden="true"></i>
             </button>
         </div>
 
@@ -779,21 +833,24 @@
             <!-- Step 1: Contact -->
             <div id="checkout-step-1" class="checkout-panel">
                 <h3 class="checkout-panel-title">Contact Information</h3>
-                <div id="co-error-1" class="auth-error hidden mb-6"></div>
+                <div id="co-error-1" class="auth-error hidden mb-6" role="alert"></div>
                 <div class="flex flex-col gap-6">
                     <div class="checkout-field">
-                        <label class="checkout-label">Email Address *</label>
-                        <input type="email" id="co-email" class="checkout-input" placeholder="your@email.com" />
+                        <label class="checkout-label" for="co-email">Email Address *</label>
+                        <input type="email" id="co-email" class="checkout-input" placeholder="your@email.com"
+                            autocomplete="email" required />
                     </div>
                     <div class="checkout-field">
-                        <label class="checkout-label">Phone Number *</label>
-                        <input type="tel" id="co-phone" class="checkout-input" placeholder="+1 (555) 000-0000" />
+                        <label class="checkout-label" for="co-phone">Phone Number *</label>
+                        <input type="tel" id="co-phone" class="checkout-input" placeholder="+1 (555) 000-0000"
+                            autocomplete="tel" required />
                     </div>
                 </div>
                 <div class="checkout-actions">
                     <span></span>
                     <button onclick="goToStep(2)" class="checkout-btn-primary">
-                        Continue to Shipping <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                        Continue to Shipping <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"
+                            aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -801,47 +858,53 @@
             <!-- Step 2: Shipping -->
             <div id="checkout-step-2" class="checkout-panel hidden">
                 <h3 class="checkout-panel-title">Shipping Address</h3>
-                <div id="co-error-2" class="auth-error hidden mb-6"></div>
+                <div id="co-error-2" class="auth-error hidden mb-6" role="alert"></div>
                 <div class="flex flex-col gap-6">
                     <div class="checkout-field">
-                        <label class="checkout-label">Full Name *</label>
-                        <input type="text" id="co-name" class="checkout-input" placeholder="Your full name" />
+                        <label class="checkout-label" for="co-name">Full Name *</label>
+                        <input type="text" id="co-name" class="checkout-input" placeholder="Your full name"
+                            autocomplete="name" required />
                     </div>
                     <div class="checkout-field">
-                        <label class="checkout-label">Address Line 1 *</label>
-                        <input type="text" id="co-address1" class="checkout-input" placeholder="Street address" />
+                        <label class="checkout-label" for="co-address1">Address Line 1 *</label>
+                        <input type="text" id="co-address1" class="checkout-input" placeholder="Street address"
+                            autocomplete="address-line1" required />
                     </div>
                     <div class="checkout-field">
-                        <label class="checkout-label">Address Line 2</label>
+                        <label class="checkout-label" for="co-address2">Address Line 2</label>
                         <input type="text" id="co-address2" class="checkout-input"
-                            placeholder="Apt, suite, unit (optional)" />
+                            placeholder="Apt, suite, unit (optional)" autocomplete="address-line2" />
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="checkout-field">
-                            <label class="checkout-label">City *</label>
-                            <input type="text" id="co-city" class="checkout-input" placeholder="City" />
+                            <label class="checkout-label" for="co-city">City *</label>
+                            <input type="text" id="co-city" class="checkout-input" placeholder="City"
+                                autocomplete="address-level2" required />
                         </div>
                         <div class="checkout-field">
-                            <label class="checkout-label">State / Province *</label>
-                            <input type="text" id="co-state" class="checkout-input" placeholder="State" />
+                            <label class="checkout-label" for="co-state">State / Province *</label>
+                            <input type="text" id="co-state" class="checkout-input" placeholder="State"
+                                autocomplete="address-level1" required />
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="checkout-field">
-                            <label class="checkout-label">ZIP / Postal Code *</label>
-                            <input type="text" id="co-zip" class="checkout-input" placeholder="00000" />
+                            <label class="checkout-label" for="co-zip">ZIP / Postal Code *</label>
+                            <input type="text" id="co-zip" class="checkout-input" placeholder="00000"
+                                autocomplete="postal-code" required />
                         </div>
                         <div class="checkout-field">
-                            <label class="checkout-label">Country *</label>
-                            <input type="text" id="co-country" class="checkout-input" placeholder="Country" />
+                            <label class="checkout-label" for="co-country">Country *</label>
+                            <input type="text" id="co-country" class="checkout-input" placeholder="Country"
+                                autocomplete="country-name" required />
                         </div>
                     </div>
 
                     <!-- Shipping Method -->
                     <div class="mt-4">
-                        <label class="checkout-label mb-4 block">Shipping Method *</label>
-                        <div class="flex flex-col gap-3">
-                            <button class="checkout-shipping-option selected" data-method="standard"
+                        <p class="checkout-label mb-4 block" id="shipping-method-label">Shipping Method *</p>
+                        <div class="flex flex-col gap-3" role="group" aria-labelledby="shipping-method-label">
+                            <button class="checkout-shipping-option selected" data-method="standard" aria-pressed="true"
                                 onclick="selectShipping('standard')">
                                 <div class="text-left">
                                     <p class="text-sm font-bold uppercase tracking-wide">Standard Shipping</p>
@@ -849,7 +912,7 @@
                                 </div>
                                 <span class="font-mono font-bold text-sm">Free</span>
                             </button>
-                            <button class="checkout-shipping-option" data-method="express"
+                            <button class="checkout-shipping-option" data-method="express" aria-pressed="false"
                                 onclick="selectShipping('express')">
                                 <div class="text-left">
                                     <p class="text-sm font-bold uppercase tracking-wide">Express Shipping</p>
@@ -862,10 +925,11 @@
                 </div>
                 <div class="checkout-actions">
                     <button onclick="goToStep(1)" class="checkout-btn-ghost">
-                        <i data-lucide="arrow-left" width="14" height="14" stroke-width="2"></i> Back
+                        <i data-lucide="arrow-left" width="14" height="14" stroke-width="2" aria-hidden="true"></i> Back
                     </button>
                     <button onclick="goToStep(3)" class="checkout-btn-primary">
-                        Review Order <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"></i>
+                        Review Order <i data-lucide="arrow-right" width="16" height="16" stroke-width="2"
+                            aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -911,7 +975,7 @@
     </div>
 
     <!-- ========== ACCOUNT DASHBOARD ========== -->
-    <div id="account-overlay"
+    <div id="account-overlay" role="dialog" aria-modal="true" aria-labelledby="account-welcome"
         class="fixed inset-0 bg-[#F2F2F2] z-[60] opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto">
         <div class="max-w-2xl mx-auto px-6 py-12">
             <!-- Header -->
@@ -922,9 +986,9 @@
                         class="text-3xl md:text-5xl font-extrabold tracking-tighter uppercase leading-none mt-2">Welcome
                         Back.</h2>
                 </div>
-                <button onclick="closeAccountDashboard()"
+                <button onclick="closeAccountDashboard()" aria-label="Close account dashboard"
                     class="hover:rotate-90 transition-transform duration-300 mt-1">
-                    <i data-lucide="x" width="24" height="24" stroke-width="2"></i>
+                    <i data-lucide="x" width="24" height="24" stroke-width="2" aria-hidden="true"></i>
                 </button>
             </div>
 
@@ -948,16 +1012,17 @@
     </div>
 
     <!-- ========== MOBILE MENU ========== -->
-    <div id="mobile-menu"
+    <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu"
         class="fixed inset-0 bg-[#0A0A0A] z-[70] flex flex-col opacity-0 pointer-events-none transition-opacity duration-300 md:hidden">
         <div class="flex justify-between items-center px-6 h-16 border-b border-white/10">
-            <h1 class="text-xl font-extrabold tracking-tighter uppercase text-[#F2F2F2]">Terra & Tide</h1>
-            <button onclick="closeMobileMenu()"
+            <span class="text-xl font-extrabold tracking-tighter uppercase text-[#F2F2F2]" aria-hidden="true">Terra
+                &amp; Tide</span>
+            <button onclick="closeMobileMenu()" aria-label="Close navigation menu"
                 class="text-[#F2F2F2] hover:rotate-90 transition-transform duration-300">
-                <i data-lucide="x" width="24" height="24" stroke-width="2"></i>
+                <i data-lucide="x" width="24" height="24" stroke-width="2" aria-hidden="true"></i>
             </button>
         </div>
-        <nav class="flex flex-col gap-2 p-8 mt-6">
+        <nav aria-label="Mobile navigation" class="flex flex-col gap-2 p-8 mt-6">
             <button onclick="scrollToSection('products-section'); closeMobileMenu()"
                 class="text-left text-4xl font-extrabold uppercase tracking-tighter text-[#F2F2F2] hover:text-gray-500 transition-colors py-3 border-b border-white/10">Shop</button>
             <button onclick="scrollToSection('cta-section'); closeMobileMenu()"
@@ -967,7 +1032,7 @@
         </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
